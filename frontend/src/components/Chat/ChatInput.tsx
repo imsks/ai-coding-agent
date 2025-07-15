@@ -1,12 +1,19 @@
-import { useState, KeyboardEvent } from "react"
+import { useState, type KeyboardEvent } from "react"
 import { Send, Loader2 } from "lucide-react"
 import { useChat } from "../../store/chat"
 import { apiService } from "../../services/api"
 import { cn } from "../../utils/cn"
+import { detectCodeArtifacts } from "../../utils/codeDetection"
 
 export function ChatInput() {
     const [message, setMessage] = useState("")
-    const { sessionId, addMessage, updateLastMessage, setStreaming } = useChat()
+    const {
+        sessionId,
+        addMessage,
+        updateLastMessage,
+        setStreaming,
+        addCodeArtifact
+    } = useChat()
 
     const handleSend = async () => {
         if (!message.trim() || useChat.getState().isStreaming) return
@@ -51,6 +58,19 @@ export function ChatInput() {
                                     ...lastMessage,
                                     isStreaming: false
                                 }
+
+                                // Detect and add code artifacts
+                                const artifacts = detectCodeArtifacts(
+                                    lastMessage.content
+                                )
+                                artifacts.forEach((artifact) => {
+                                    addCodeArtifact({
+                                        code: artifact.code,
+                                        language: artifact.language,
+                                        title: artifact.title,
+                                        messageId: lastMessage.id
+                                    })
+                                })
                             }
                         }
                     }
