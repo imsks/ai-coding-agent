@@ -21,13 +21,11 @@ export function ChatInput() {
         const userMessage = message.trim()
         setMessage("")
 
-        // Add user message
         addMessage({
             role: "user",
             content: userMessage
         })
 
-        // Add assistant message placeholder
         addMessage({
             role: "assistant",
             content: "",
@@ -47,7 +45,6 @@ export function ChatInput() {
                     },
                     () => {
                         setStreaming(false)
-                        // Update the last message to remove streaming state
                         const messages = useChat.getState().messages
                         if (messages.length > 0) {
                             const lastMessage = messages[messages.length - 1]
@@ -59,7 +56,6 @@ export function ChatInput() {
                                     isStreaming: false
                                 }
 
-                                // Detect and add code artifacts
                                 const artifacts = detectCodeArtifacts(
                                     lastMessage.content
                                 )
@@ -79,7 +75,6 @@ export function ChatInput() {
         } catch (error) {
             console.error("Error sending message:", error)
             setStreaming(false)
-            // Update last message with error
             updateLastMessage(
                 "\n\nError: Failed to get response. Please try again."
             )

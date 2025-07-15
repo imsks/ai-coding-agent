@@ -3,6 +3,7 @@ import { useChat } from "../../store/chat"
 import { CodeView } from "./CodeView"
 import { PreviewView } from "./PreviewView"
 import { ToggleGroup } from "./ToggleGroup"
+import React from "react"
 
 export function Sidebar() {
     const { isSidebarOpen, sidebarView, currentArtifact, toggleSidebar } =
@@ -13,8 +14,7 @@ export function Sidebar() {
     }
 
     return (
-        <>
-            {/* Mobile backdrop */}
+        <React.Fragment>
             <div
                 className='md:hidden fixed inset-0 bg-black bg-opacity-50 z-30'
                 onClick={toggleSidebar}
@@ -44,6 +44,6 @@ export function Sidebar() {
                     )}
                 </div>
             </div>
-        </>
+        </React.Fragment>
     )
 }

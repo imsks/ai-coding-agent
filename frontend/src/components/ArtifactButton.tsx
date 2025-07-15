@@ -1,4 +1,4 @@
-import { Code, Eye, X } from "lucide-react"
+import { Code, X } from "lucide-react"
 import { useChat } from "../store/chat"
 import { cn } from "../utils/cn"
 
@@ -11,22 +11,18 @@ export function ArtifactButton() {
         setCurrentArtifact
     } = useChat()
 
-    // Don't show button if no artifacts exist
     if (codeArtifacts.length === 0) {
         return null
     }
 
-    // Get the latest artifact if no current artifact is selected
     const latestArtifact = codeArtifacts[codeArtifacts.length - 1]
     const artifactToShow = currentArtifact || latestArtifact
 
     const handleClick = () => {
         if (!isSidebarOpen) {
-            // Open sidebar and set current artifact
             setCurrentArtifact(artifactToShow)
             toggleSidebar()
         } else {
-            // Close sidebar
             toggleSidebar()
         }
     }

@@ -1,9 +1,8 @@
-import { useEffect, useRef } from "react"
+import { useRef } from "react"
 import { Editor } from "@monaco-editor/react"
 import { Download, Copy, Check } from "lucide-react"
 import { useState } from "react"
 import type { CodeArtifact } from "../../store/chat"
-import { cn } from "../../utils/cn"
 
 interface CodeViewProps {
     artifact: CodeArtifact
@@ -41,27 +40,7 @@ export function CodeView({ artifact }: CodeViewProps) {
         const extensions: Record<string, string> = {
             javascript: "js",
             typescript: "ts",
-            python: "py",
-            html: "html",
-            css: "css",
-            json: "json",
-            markdown: "md",
-            java: "java",
-            cpp: "cpp",
-            c: "c",
-            go: "go",
-            rust: "rs",
-            php: "php",
-            ruby: "rb",
-            swift: "swift",
-            kotlin: "kt",
-            scala: "scala",
-            sql: "sql",
-            xml: "xml",
-            yaml: "yml",
-            shell: "sh",
-            bash: "sh",
-            powershell: "ps1"
+            python: "py"
         }
         return extensions[language.toLowerCase()] || "txt"
     }

@@ -11,19 +11,31 @@ async def chat(req: ChatRequest):
         history = get_memory(req.session_id)
         history.append({"role": "user", "content": req.message})
 
+        contents = []
+        for msg in history:
+            if msg["role"] == "user":
+                contents.append({"role": "user", "parts": [{"text": msg["content"]}]})
+            elif msg["role"] == "assistant":
+                contents.append({"role": "model", "parts": [{"text": msg["content"]}]})
+        
+        if not contents:
+            contents = [{"role": "user", "parts": [{"text": req.message}]}]
+
         gen = model.generate_content(
-            messages=history,
-            stream=True,  # Gemini streaming
+            contents=contents,
+            stream=True,
         )
 
         async def streamer():
             try:
+                full_response = ""
                 for chunk in gen:
                     if chunk.text:
                         delta = chunk.text
-                        yield f"data:{delta}\n\n"  # SSE
-                # save assistant msg at the end
-                history.append({"role": "assistant", "content": gen.text})
+                        full_response += delta
+                        yield f"data:{delta}\n\n"
+                
+                history.append({"role": "assistant", "content": full_response})
             except Exception as e:
                 yield f"data:Error: {str(e)}\n\n"
 
